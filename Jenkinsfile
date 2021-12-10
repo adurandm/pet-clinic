@@ -44,6 +44,7 @@ pipeline {
                 sh "./deploy.sh dev $TAG_NAME"
             }
         }
+    
         
         stage('Decide Deploy to Test'){
     when {
@@ -53,6 +54,19 @@ pipeline {
     when {
         branch 'master'
     }
+                
+  
+                stage('Deploy Test'){
+    when {
+        branch 'master'
+    }
+    agent any
+    steps {
+        sh "chmod +x deploy.sh"
+        sh "./deploy.sh test $TAG_NAME"
+    }
+}
+                
                 
                 stage("End to End Tests") {
     when {
@@ -72,11 +86,7 @@ pipeline {
     }
 }
 
-            
-    agent none
-    steps {
-        input message: 'Deploy to Test?'
-    }            
+             
 }
 
     }
