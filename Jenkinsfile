@@ -53,6 +53,7 @@ pipeline {
     when {
         branch 'master'
     }
+                
                 stage("End to End Tests") {
     when {
         branch 'master'
