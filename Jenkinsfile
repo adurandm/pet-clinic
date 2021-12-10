@@ -37,26 +37,25 @@ pipeline {
             }
         }
 
-        stage('Deploy Development') {
+     
+   stage('Deploy Development') {
             agent any
             steps {
                 sh "chmod +x deploy.sh"
                 sh "./deploy.sh dev $TAG_NAME"
             }
         }
-    
-        
+
         stage('Decide Deploy to Test'){
     when {
         branch 'master'
     }
-            stage('Deploy Test'){
-    when {
-        branch 'master'
-    }
-                
-  
-                stage('Deploy Test'){
+    agent none
+    steps {
+        input message: 'Deploy to Test?'
+    }            
+}
+stage('Deploy Test'){
     when {
         branch 'master'
     }
@@ -66,9 +65,7 @@ pipeline {
         sh "./deploy.sh test $TAG_NAME"
     }
 }
-                
-                
-                stage("End to End Tests") {
+stage("End to End Tests") {
     when {
         branch 'master'
     }
@@ -79,15 +76,10 @@ pipeline {
     }
 }
 
-    agent any
-    steps {
-        sh "chmod +x deploy.sh"
-        sh "./deploy.sh test $TAG_NAME"
+        
+        
+        
+        
     }
-}
+} 
 
-             
-}
-
-    }
-}
